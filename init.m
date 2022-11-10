@@ -5,4 +5,4 @@ addpath(genpath(wrkDir));
 pathIn = [wrkDir,'\inputs\'];
 pathRes = [wrkDir,'\results\']; 
 pathFig = [wrkDir,'\figures\'];
-rmpath('old');rmpath('.git');
+rmpath('.old');rmpath('.git');
