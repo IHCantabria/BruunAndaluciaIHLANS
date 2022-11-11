@@ -1,0 +1,21 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Genera el dominio
+
+clear *; close all; clc; 
+
+try init; catch me; cd ..; init; end
+%% ------------------------ CARGANDO LOS DATOS ------------------------
+
+load("EnsamblesProfiles.mat");
+
+%% ------------------------- SEPARANDO PERFILES -------------------------
+
+xi=;
+
+RefSL=ReferenceSL;
+RefSL=RefSL.init();
+
+%% --- GUARDA DATOS ---
+% save([pathRes 'EnsamblesProfiles.mat'],'ENS')
+
+%% --------------------------END--------------------------
