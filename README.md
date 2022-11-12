@@ -17,4 +17,4 @@ El primer paso, para trabajar en tu repositorio local es cambiar las rutas en el
 
 ### Referencias
 
-Enríquez, A.R., Marcos, M., Falqués, A., Roelvink, D., 2019. Assessing beach and dune erosion and vulnerability under sea level rise: A Case study in the Mediterranean Sea. Front Mar Sci 6. https://doi.org/10.3389/fmars.2019.00004
+Alvarez-Cuesta, M., Toimil, A., Losada, I.J., 2021. Modelling long-term shoreline evolution in highly anthropized coastal areas. Part 1: Model description and validation. Coastal Engineering 169. https://doi.org/10.1016/J.COASTALENG.2021.103960
