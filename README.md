@@ -1,7 +1,6 @@
 # Aplicación del modelo IH-LANS a la playa de Fuengirola-Málaga 
 
 ![Versión del código](https://img.shields.io/badge/Version-0.0.1-brightgreen)
-![GitHub repo size](https://img.shields.io/badge/Repo%20size-80%20MB-blue)
 ![Grupo IH](https://img.shields.io/badge/Grupo-Costas-blue)
 ![](https://img.shields.io/badge/%C2%BFDudas%3F-M%C3%A1ndame%20un%20correo-orange) <lucas.defreitas@unican.es>
 
