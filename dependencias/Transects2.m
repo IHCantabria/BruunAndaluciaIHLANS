@@ -1,6 +1,6 @@
 classdef  Transects2
     properties
-        RefShore
+        RefLine
         xin
         yin
         xof
@@ -8,29 +8,28 @@ classdef  Transects2
     end
     methods
         function obj = init(obj,Ref,dy,LenTRS)%,lenTRS
-            obj.RefShore=Ref;
-            nTRS=floor(obj.RefShore.len/dy);
-%             res=obj.len-floor(obj.RefShore.len);
-%             a=-1/obj.RefShore.p(1);
-            dist=(0:dy:nTRS*dy)';
-            resid = @(x) dist - sqrt((obj.RefShore.xi-x).^2+...
-                (obj.RefShore.yi-obj.RefShore.pol1d(x)).^2);
+            obj.RefLine=Ref;
+            nTRS=floor(Ref.len/dy);
 
-%             obj.xin=gmres(resid,d);
+            OutBnd=Ref.len-nTRS*dy;
 
-            obj.xin = fsolve(resid,repmat(obj.RefShore.xi,...
+            dist=(OutBnd/2:dy:nTRS*dy+OutBnd/2)';
+            resid = @(x) dist - sqrt((Ref.xi-x).^2+...
+                (Ref.yi-Ref.pol1d(x)).^2);
+
+            obj.xin = fsolve(resid,repmat(Ref.xi,...
                 [numel(dist),1]));
-            obj.yin = obj.RefShore.pol1d(obj.xin);
+            obj.yin = Ref.pol1d(obj.xin);
             
-            m = -1/obj.RefShore.p(1);
-            c = obj.RefShore.p(2) - LenTRS * sqrt(obj.RefShore.p(1)^2+1);
+            m = -1/Ref.p(1);
+            c = Ref.p(2) - LenTRS * sqrt(Ref.p(1)^2+1);
 
             
             resid2 = @(x) m .* (x - obj.xin) + obj.yin ...
-                - (obj.RefShore.p(1) .* x + c);
+                - (Ref.p(1) .* x + c);
 
             obj.xof = fsolve(resid2,obj.xin);
-            obj.yof = obj.RefShore.p(1) .* obj.xof + c;
+            obj.yof = Ref.p(1) .* obj.xof + c;
 
         end
     end

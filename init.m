@@ -8,3 +8,4 @@ pathFig = [wrkDir,'\figures\'];
 rmpath('.old');rmpath('.git');
 
 pathLANS = 'C:\Users\freitasl\Documents\MATLAB\LANS';
+addpath(genpath(pathLANS));

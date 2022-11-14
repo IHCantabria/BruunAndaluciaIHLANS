@@ -23,7 +23,7 @@ end
 for i=1:numel(perf)
     try
         col = ['Transect' num2str(perf(i))];
-        ii = isnan(LC.(col));
+        ii = ~isnan(LC.(col));
         ENS(k).time = Fecha(ii);
         ENS(k).Yobs = LC.(col)(ii);
         ENS(k).Sat = LC.satname(ii);
@@ -38,6 +38,38 @@ for i=1:numel(perf)
     end
 end
 
+%% ------------------------- CALCULAMOS LA MEDIA -------------------------
+
+tmin=min(min(vertcat(ENS.time)));
+tmax=max(max(vertcat(ENS.time)));
+
+time=[tmin:1:tmax]';
+OBS=nan(numel(time),1);
+
+for i=1:numel(time)
+    clear ii aux;
+    for j=1:numel(ENS)
+        ii = abs(ENS(j).time-time(i))<=1;
+        if sum(ii)>0
+            aux(j) = mean(ENS(j).Yobs(ii));
+        else
+            aux(j)=nan;
+        end
+    end
+    OBS(i)=mean(aux(~isnan(aux)));
+end
+
+OBS=OBS(~isnan(OBS));time=time(~isnan(OBS));
+
+%% ------------------------- DESACOPLAMOS LT y ST -------------------------
+
+timeLT=5*365; %[dias]
+Y_obs_lt=movmean(OBS,timeLT);
+Y_obs_st=OBS - Y_obs_lt;
+
+clear ENS;
+
+ENS.time=time; ENS.Y_obs_lt=Y_obs_lt;ENS.Y_obs_st=Y_obs_st;
 
 %% --- GUARDA DATOS ---
 save([pathRes 'EnsamblesProfiles.mat'],'ENS')

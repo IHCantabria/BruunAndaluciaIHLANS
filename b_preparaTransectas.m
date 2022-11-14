@@ -10,11 +10,11 @@ pltFlag = 1; % quieres graficar?
 
 %% ------------------------- SEPARANDO PERFILES -------------------------
 
-xi=328803.436; yi=4041814.838;
-xf=329725.341; yf=4041861.742;
+xi=355169.636; yi=4045852.523;
+xf=356409.115; yf=4047954.133;
 
 dy=100; %[m]
-lenTRS=600; %[m]
+lenTRS=1000; %[m]
 
 RefSL=ReferenceSL;
 RefSL=RefSL.init(xi,yi,xf,yf);
@@ -45,15 +45,16 @@ end
 
 Proj=projcrs(3042);
 
-% [Lat,Lon] = projinv(Proj,[RefSL.xi RefSL.xf],[RefSL.yi RefSL.yf]);
+for i=1:numel(TRS.xin)
+    XTRS{i}=[TRS.xin(i) TRS.xof(i)];YTRS{i}=[TRS.yin(i) TRS.yof(i)];
+end
 
 ShapeRef = mapshape([RefSL.xi RefSL.xf],[RefSL.yi RefSL.yf]);
-
-% ShapeRef.ProjectedCRS = Proj;
-% ShapeRef.Filename = 'testRefLine.shp';
+ShapeTRS = mapshape(XTRS,YTRS);
 
 %% --- GUARDA DATOS ---
-% save([pathRes 'EnsamblesProfiles.mat'],'ENS')
-shapewrite(ShapeRef,'testRefLine.shp')
+
+shapewrite(ShapeRef,[pathRes 'testRefLine.shp'])
+shapewrite(ShapeTRS,[pathRes 'Transectas.shp'])
 
 %% --------------------------END--------------------------
