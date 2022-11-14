@@ -128,7 +128,7 @@ INPUT.DYN.SLR=SLR;
 % 
 % RSLR=wast(hb,d50).*SLR./(dc(1)+1);
 
-INPUT.RSLR=SLR;
+% INPUT.RSLR=SLR;
 
 %% ----------------------- PARAMETROS DEL MODELO -----------------------
 
@@ -153,7 +153,7 @@ INPUT.toutp=1;
 INPUT.data_asim_l=1;
 INPUT.data_asim_c=1;
 INPUT.data_asim_lc=1;
-INPUT.path_save='C:\Users\freitasl\Documents\MATLAB\Results\FuengirolaIHLANS';
+% INPUT.path_save='';
 
 INPUT.OUTPUTPERF_ASIM=1:nTRS;
 

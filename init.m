@@ -7,5 +7,5 @@ pathRes = [wrkDir,'\results\'];
 pathFig = [wrkDir,'\figures\'];
 rmpath('.old');rmpath('.git');
 
-pathLANS = 'C:\Users\freitasl\Documents\MATLAB\LANS';
+pathLANS = 'C:\Users\lucas\OneDrive\Documentos\MATLAB\ModelosHibridos\LANS';
 addpath(genpath(pathLANS));
