@@ -78,7 +78,7 @@ for i=1:numel(TimeTOT)
     end
 end
 
-Yobs=fillmissing(Yobs,'makima');
+Yobs=fillmissing(Yobs,'spline');
 
 for i=1:numel(ENS)
     [X(:,i),Y(:,i)]=abs_pos(ENS(i).xon,ENS(i).yon,ENS(i).phi,Yobs(:,i));
@@ -94,7 +94,7 @@ for i=1:numel(TimeTOT)
     end
 end
 
-% Yobs=Yobs(10:end);
+Yobs=Yobs(5:end)
 clear ENS;
 
 ENS.Yobs=Yobs;ENS.X=X; ENS.Y=Y;ENS.time=TimeTOT;

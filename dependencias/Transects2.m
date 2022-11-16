@@ -5,15 +5,20 @@ classdef  Transects2
         yin
         xof
         yof
+        p
+        nTRS
+        nOBS
+        Y_obs
+        t_obs
     end
     methods
         function obj = init(obj,Ref,dy,LenTRS)%,lenTRS
             obj.RefLine=Ref;
-            nTRS=floor(Ref.len/dy);
+            n=floor(Ref.len/dy);
 
-            OutBnd=Ref.len-nTRS*dy;
+            OutBnd=Ref.len-n*dy;
 
-            dist=(OutBnd/2:dy:nTRS*dy+OutBnd/2)';
+            dist=(OutBnd/2:dy:n*dy+OutBnd/2)';
             resid = @(x) dist - sqrt((Ref.xi-x).^2+...
                 (Ref.yi-Ref.pol1d(x)).^2);
 
@@ -30,7 +35,27 @@ classdef  Transects2
 
             obj.xof = fsolve(resid2,obj.xin);
             obj.yof = Ref.p(1) .* obj.xof + c;
+%             obj.p
+            obj.p(:,1) = (obj.yof-obj.yin)./(obj.xof-obj.xin);
+            obj.p(:,2) = obj.yin - obj.p(:,1).*obj.xin;
 
+            obj.nTRS=n+1;
+
+        end
+        function obj = addSamples(obj, ENS)
+            obj.nOBS=size(ENS.Yobs,1);
+            yOBS=zeros(obj.nTRS,1);
+            xOBS=zeros(obj.nTRS,1);
+            obj.Y_obs=zeros(obj.nOBS,obj.nTRS);
+            for i=1:obj.nOBS
+                f_ENS=fit(ENS.X(i,:)',ENS.Y(i,:)','linearinterp');
+                resFun=@(x) f_ENS(x) - (obj.p(:,1).*x + obj.p(:,2));
+                xOBS = fsolve(resFun,obj.xin);
+                yOBS = f_ENS(xOBS);
+                obj.Y_obs(i,:) = sqrt((xOBS-obj.xin).^2+(yOBS-obj.yin).^2)';
+
+            end
+            obj.t_obs=ENS.time;
         end
     end
 end

@@ -6,21 +6,25 @@ clear *; close all; clc;
 try init; catch me; cd ..; init; end
 %% ------------------------ CARGANDO LOS DATOS ------------------------
 
+load('EnsamblesProfiles.mat');
 pltFlag = 1; % quieres graficar?
+
+xi=364427.109; yi=4051734.355;
+xf=368993.083; yf=4058795.609;
+
+dy=100; %[m]
+lenTRS=1500; %[m]
 
 %% ------------------------- SEPARANDO PERFILES -------------------------
 
-xi=355169.636; yi=4045852.523;
-xf=356409.115; yf=4047954.133;
 
-dy=100; %[m]
-lenTRS=1000; %[m]
 
 RefSL=ReferenceSL;
 RefSL=RefSL.init(xi,yi,xf,yf);
 
 TRS=Transects2;
 TRS=TRS.init(RefSL,dy,lenTRS);
+TRS=TRS.addSamples(ENS);
 
 %% ------------------------- SEPARANDO PERFILES -------------------------
 
@@ -56,5 +60,6 @@ ShapeTRS = mapshape(XTRS,YTRS);
 
 shapewrite(ShapeRef,[pathRes 'testRefLine.shp'])
 shapewrite(ShapeTRS,[pathRes 'Transectas.shp'])
+save([pathRes 'TRS_Fuengi.mat'],'TRS')
 
 %% --------------------------END--------------------------
