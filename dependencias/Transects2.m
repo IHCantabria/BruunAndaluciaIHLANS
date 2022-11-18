@@ -10,6 +10,7 @@ classdef  Transects2
         nOBS
         Y_obs
         t_obs
+        Y_inicial
     end
     methods
         function obj = init(obj,Ref,dy,LenTRS)%,lenTRS
@@ -53,9 +54,9 @@ classdef  Transects2
                 xOBS = fsolve(resFun,obj.xin);
                 yOBS = f_ENS(xOBS);
                 obj.Y_obs(i,:) = sqrt((xOBS-obj.xin).^2+(yOBS-obj.yin).^2)';
-
             end
             obj.t_obs=ENS.time;
+            obj.Y_inicial = obj.Y_obs(1,:)';
         end
     end
 end

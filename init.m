@@ -1,4 +1,4 @@
-global  wrkDir pathLANS %#ok<GVMIS> 
+global  wrkDir pathLANS pathIn pathRes pathFig %#ok<GVMIS> 
 
 wrkDir=pwd();
 addpath(genpath(wrkDir));
