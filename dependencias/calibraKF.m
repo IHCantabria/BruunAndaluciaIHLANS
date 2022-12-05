@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Prepara el INPUT del IH-LANS
 
-function calibraKF(kero,kacr,nsave)
+function [INPUT, RES]=calibraKF(nsave)
 
 close all;
 % clear *;  clc;
@@ -17,8 +17,12 @@ warning off;
 load('DOW.mat','hs','dir','tps','depth','time','lat','lon');timeW=time;
 load('GOS.mat','zeta','time');timeSS=time;
 load('GOT.mat','tide','time');timeT=time;
+load('dy0.mat')
+load('DYNP.mat')
 clear time;
-
+load('kacr.mat')
+load("kero.mat")
+load('kcerc.mat')
 load('Ej_INPUT.mat');
 load('Punto_0704_SSP245.mat');
 load("TRS_Fuengi.mat");
@@ -76,13 +80,14 @@ for i = 1:nTRS
 %     rad2deg(atan((Domain(i).Y(2)-Domain(i).Y(1))/...
 %         (Domain(i).X(2)-Domain(i).X(1))));
     INPUT.PERF(i).date_obs=TRS.t_obs;%ENS(i).time;
-    INPUT.PERF(i).Y_obs_ct=TRS.Y_obs(:,i);%ENS(i).Yobs;
-    INPUT.PERF(i).Y_obs_lt=TRS.Y_obs(:,i)-TRS.Y_obs(:,i);%zeros(size(ENS(i).Yobs));
-    INPUT.PERF(i).R_c=5.5;
-    INPUT.PERF(i).R=5;
+    INPUT.PERF(i).Y_obs_lt=movmean(TRS.Y_obs(:,i),50,1);
+    INPUT.PERF(i).Y_obs_ct=TRS.Y_obs(:,i)-INPUT.PERF(i).Y_obs_lt;%ENS(i).Yobs;
+    %zeros(size(ENS(i).Yobs));
+    INPUT.PERF(i).R_c=3.;
+    INPUT.PERF(i).R=3;
 
     %P0=(e(Ylt) e(Kcerc) e(vlt))
-    INPUT.PERF(i).rP0=diag([1 .25 1e-4]).^2;
+    INPUT.PERF(i).rP0=diag([1 0.25 1e-4]).^2;
     
     %Q=(del(Ylt) del(Kcerc) del(vlt))
     INPUT.PERF(i).rQ=diag([0.1 1e-1 1e-5]).^2;
@@ -90,12 +95,12 @@ for i = 1:nTRS
     %P0ero=(e(Yst) e(Kero) 0 0 e(dy0))
     INPUT.PERF(i).rPero0_c=diag([1 .25 0 0 1]).^2; 
     %Qero=(del(Yst) del(Kero) 0 0 del(dy0))
-    INPUT.PERF(i).rQero_c=diag([0.1 1e-1 0 0 .1]).^2;
+    INPUT.PERF(i).rQero_c=diag([0.1 5e-2 0 0 .1]).^2;
 
     %P0ero=(0 0 e(Yst) e(Kacr) e(dy0))
     INPUT.PERF(i).rPacr0_c=diag([0 0 1 .25 1]).^2;
     %P0ero=(0 0 del(Yst) del(Kacr) del(dy0))
-    INPUT.PERF(i).rQacr_c=diag([0 0 0.1 1e-2 .1]).^2;
+    INPUT.PERF(i).rQacr_c=diag([0 0 .1 1e-2 .1]).^2;
 
 end
 
@@ -182,11 +187,14 @@ INPUT.calcularotura = 1;
 INPUT.inthidromorfo = 0;
 INPUT.alpha_int=1;
 INPUT.gamma=.55;
-INPUT.kcerc=20;
+% INPUT.kcerc=(rand(1,nTRS)-.5)*10+50;%INPUT.kcerc(1)=0; INPUT.kcerc(end)=0;
+INPUT.kcerc=kcerc;
 % INPUT.bctype={'Dirichlet','Dirichlet'};
 INPUT.bctype={'Neumann','Neumann'};
 INPUT.bctypeval=[0,0;0,0];
 INPUT.fcourant=.1;
+% INPUT.kacr=(rand(1,nTRS)-.5)*kacr*.1+kacr;INPUT.kacr(1)=0; INPUT.kacr(end)=0; INPUT.kacr(24)=0;
+% INPUT.kero=(rand(1,nTRS)-.5)*kero*.1+kero;INPUT.kero(1)=0; INPUT.kero(end)=0; INPUT.kero(24)=0;
 INPUT.kacr=kacr;
 INPUT.kero=kero;
 INPUT.dy0=0;
@@ -196,11 +204,12 @@ INPUT.plott=0;
 INPUT.toutp=1;
 INPUT.data_asim_l=1;
 INPUT.data_asim_c=1;
-INPUT.data_asim_lc=1;
+INPUT.data_asim_lc=0;
 INPUT.OUTPUTLIST={'Hbd','Dbd','wbd','Q','kest','dQdx','Qbc','saltoYlt',...
     'kcerc','vlt','saltoYct','kero','kacr','dy0','Yeq'};
 INPUT.OUTPUTPERF_ASIM=1:nTRS;
-
+INPUT.DYNP=DYNP;
+INPUT.dy0=dy0;
 % clearvars -except INPUT pathRes wrkDir
 
 save([pathRes 'Fuengirola.mat'],"INPUT",'-mat');
@@ -211,10 +220,6 @@ INPUT.path_save='C:\Users\freitasl\Documents\MATLAB\Results\FuengirolaIHLANS';
 
 INPUT.nsave=[nsave '.mat'];
 
-RES=IH_LANS(INPUT);
+RES=IH_LANS_sinrot(INPUT);
 evaluaResultados(INPUT,RES,[INPUT.nsave '.png'],pathFig);
-
-
-
-
 

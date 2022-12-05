@@ -31,9 +31,11 @@ colores={'k-','kx';...
     'c-','cx';};
 k=1;
 hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.YCT(:,i)+RES.YLT(:,i),colores{k,1})
-    plot(INPUT.PERF(i).date_obs,INPUT.PERF(i).Y_obs_ct,colores{k,2})
+for i=2:13:82
+    Y=RES.YCT(:,i)+RES.YLT(:,i);
+%     plot(RES.t_output(Y<1000 & Y>300),Y(Y<1000 & Y>300),colores{k,1})
+    plot(RES.t_output,Y,colores{k,1})
+    plot(INPUT.PERF(i).date_obs,INPUT.PERF(i).Y_obs_ct+INPUT.PERF(i).Y_obs_lt,colores{k,2})
     k=k+1;
 end
 ax=gca;
@@ -50,7 +52,7 @@ tit='Y_s_t';
 title(tit);
 k=1;
 hold on;
-for i=1:10:61
+for i=2:13:82
     plot(RES.t_output,RES.YCT(:,i),colores{k,1})
     k=k+1;
 end
@@ -67,7 +69,7 @@ tit='Y_l_t';
 title(tit);
 k=1;
 hold on;
-for i=1:10:61
+for i=2:13:82
     plot(RES.t_output,RES.YLT(:,i),colores{k,1})
     k=k+1;
 end
@@ -84,7 +86,7 @@ tit='K_c_e_r_c';
 title(tit);
 k=1;
 hold on;
-for i=1:10:61
+for i=2:13:82
     plot(RES.t_output,RES.kcerc(:,i),colores{k,1})
     k=k+1;
 end
@@ -101,7 +103,7 @@ tit='K_e_r_o';
 title(tit);
 k=1;
 hold on;
-for i=1:10:61
+for i=2:13:82
     plot(RES.t_output,RES.kero(:,i),colores{k,1})
     k=k+1;
 end
@@ -118,7 +120,7 @@ tit='K_a_c_r';
 title(tit);
 k=1;
 hold on;
-for i=1:10:61
+for i=2:13:82
     plot(RES.t_output,RES.kacr(:,i),colores{k,1})
     k=k+1;
 end

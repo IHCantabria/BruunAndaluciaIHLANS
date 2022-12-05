@@ -1,6 +1,15 @@
 
+init();
 
-kero=[1e-2];
-kacr=[1e-3];
+% kero=[5e-2];
+% kacr=[1e-4];
 
-calibraKF(kero,kacr,['kero=' num2str(kero) '_kacr=' num2str(kacr) '_dt=24h_KF']);
+[INPUT,RES]=calibraKF([num2str(now()) '_dt=24h_KF']);
+
+kero=RES.kero(end,:);
+kacr=RES.kacr(end,:);
+kcerc=RES.kcerc(end,:);
+
+save('kero.mat','kero');
+save('kacr.mat','kacr');
+save('kcerc.mat','kcerc');
