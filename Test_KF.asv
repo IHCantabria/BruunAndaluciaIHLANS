@@ -1,7 +1,0 @@
-
-init();
-
-kero=load();
-kacr=[1e-4];
-
-[INPUT,RES]=calibraKF(kero,kacr,['kero=' num2str(kero) '_kacr=' num2str(kacr) '_dt=24h_KF']);

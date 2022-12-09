@@ -48,11 +48,45 @@ classdef  Transects2
             yOBS=zeros(obj.nTRS,1);
             xOBS=zeros(obj.nTRS,1);
             obj.Y_obs=zeros(obj.nOBS,obj.nTRS);
+            
+            H=figure('Position',[10 10 900 600]);
+            ax=gca();
+            ax.YLim=[min(min(ENS.Y))-400,max(max(ENS.Y))+400];
+            ax.XLim=[min(min(ENS.X))-100,max(max(ENS.X))+100];
+
             for i=1:obj.nOBS
                 f_ENS=fit(ENS.X(i,:)',ENS.Y(i,:)','linearinterp');
                 resFun=@(x) f_ENS(x) - (obj.p(:,1).*x + obj.p(:,2));
                 xOBS = fsolve(resFun,obj.xin);
                 yOBS = f_ENS(xOBS);
+                
+                [YY,MM,DD]=datevec(ENS.time(i));
+                
+                hold off
+                plot(ENS.X(i,:),ENS.Y(i,:),'ko')
+                hold on
+                plot(xOBS,yOBS,'rx')
+                grid; grid minor;
+                ax.GridLineStyle='-';
+                ax.GridColor='k';
+                ax.GridAlpha=.6;
+                ax.YLabel.String='Y [UTM]';
+                ax.XLabel.String='X [UTM]';
+                title([num2str(DD,'%02d'),'/',num2str(MM,'%02d'),'/',num2str(YY,'%04d')])
+                legend('Medición','Interpolación',Location='northwest')
+                ax.FontWeight='bold';
+                ax.FontSize=10;
+                
+                drawnow
+                frame=getframe(H);
+                im=frame2im(frame);
+                [imind,cm]=rgb2ind(im,256);
+                if i==1
+                    imwrite(imind,cm,'EvolSL.gif','gif','loopcount', inf);
+                else
+                    imwrite(imind,cm,'EvolSL.gif','gif','WriteMode','append');
+                end
+                
                 obj.Y_obs(i,:) = sqrt((xOBS-obj.xin).^2+(yOBS-obj.yin).^2)';
             end
             obj.t_obs=ENS.time;

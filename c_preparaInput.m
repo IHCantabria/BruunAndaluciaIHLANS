@@ -73,7 +73,7 @@ for i = 1:nTRS
 %     rad2deg(atan((Domain(i).Y(2)-Domain(i).Y(1))/...
 %         (Domain(i).X(2)-Domain(i).X(1))));
     INPUT.PERF(i).date_obs=TRS.t_obs;%ENS(i).time;
-    INPUT.PERF(i).Y_obs_lt=movmean(TRS.Y_obs(:,i),50,1);
+    INPUT.PERF(i).Y_obs_lt=movmean(TRS.Y_obs(:,i),365*4,1);
     INPUT.PERF(i).Y_obs_ct=TRS.Y_obs(:,i)-INPUT.PERF(i).Y_obs_lt;%ENS(i).Yobs;
     INPUT.PERF(i).R_c=5.5;
     INPUT.PERF(i).R=5;

@@ -58,8 +58,8 @@ ShapeTRS = mapshape(XTRS,YTRS);
 
 %% --- GUARDA DATOS ---
 
-shapewrite(ShapeRef,[pathRes 'testRefLine.shp'])
-shapewrite(ShapeTRS,[pathRes 'Transectas.shp'])
+% shapewrite(ShapeRef,[pathRes 'testRefLine.shp'])
+% shapewrite(ShapeTRS,[pathRes 'Transectas.shp'])
 save([pathRes 'TRS_Fuengi.mat'],'TRS')
 
 %% --------------------------END--------------------------

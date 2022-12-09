@@ -36,8 +36,9 @@ for i=1:numel(perf)
         ENS(k).yof = Profiles.yof(perf(i));
         ENS(k).phi = -pi/2.-atan((ENS(k).xof-ENS(k).xon)/(ENS(k).yof-ENS(k).yon));
         TimeTOT=[TimeTOT;ENS(i).time];
-        [ENS(k).absX,ENS(i).absY]=abs_pos(ENS(k).xon,ENS(k).yon,ENS(k).phi,ENS(k).Yobs);
+        [ENS(k).absX,ENS(k).absY]=abs_pos(ENS(k).xon,ENS(k).yon,ENS(k).phi,ENS(k).Yobs);
         k=k+1;
+
     catch
 %         ENS(i).time = [];
 %         ENS(i).Yobs = [];
@@ -81,7 +82,10 @@ end
 Yobs=fillmissing(Yobs,'makima');
 
 for i=1:numel(ENS)
+
     [X(:,i),Y(:,i)]=abs_pos(ENS(i).xon,ENS(i).yon,ENS(i).phi,Yobs(:,i));
+
+
 end
 
 
@@ -93,6 +97,7 @@ for i=1:numel(TimeTOT)
         k=k+1;
     end
 end
+
 
 % Yobs=Yobs(10:end);
 clear ENS;

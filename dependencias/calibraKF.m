@@ -80,7 +80,7 @@ for i = 1:nTRS
 %     rad2deg(atan((Domain(i).Y(2)-Domain(i).Y(1))/...
 %         (Domain(i).X(2)-Domain(i).X(1))));
     INPUT.PERF(i).date_obs=TRS.t_obs;%ENS(i).time;
-    INPUT.PERF(i).Y_obs_lt=movmean(TRS.Y_obs(:,i),50,1);
+    INPUT.PERF(i).Y_obs_lt=movmean(TRS.Y_obs(:,i),365*4,1);
     INPUT.PERF(i).Y_obs_ct=TRS.Y_obs(:,i)-INPUT.PERF(i).Y_obs_lt;%ENS(i).Yobs;
     %zeros(size(ENS(i).Yobs));
     INPUT.PERF(i).R_c=3.;
@@ -189,8 +189,8 @@ INPUT.alpha_int=1;
 INPUT.gamma=.55;
 % INPUT.kcerc=(rand(1,nTRS)-.5)*10+50;%INPUT.kcerc(1)=0; INPUT.kcerc(end)=0;
 INPUT.kcerc=kcerc;
-% INPUT.bctype={'Dirichlet','Dirichlet'};
-INPUT.bctype={'Neumann','Neumann'};
+INPUT.bctype={'Dirichlet','Dirichlet'};
+% INPUT.bctype={'Neumann','Neumann'};
 INPUT.bctypeval=[0,0;0,0];
 INPUT.fcourant=.1;
 % INPUT.kacr=(rand(1,nTRS)-.5)*kacr*.1+kacr;INPUT.kacr(1)=0; INPUT.kacr(end)=0; INPUT.kacr(24)=0;
