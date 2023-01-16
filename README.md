@@ -1,4 +1,4 @@
-# Aplicación del modelo IH-LANS a la playa de Fuengirola-Málaga 
+# Aplicación del modelo IH-LANS a la costa Andaluza para el proyecto Bruun Andalucia 
 
 ![Versión del código](https://img.shields.io/badge/Version-0.0.1-brightgreen)
 ![Grupo IH](https://img.shields.io/badge/Grupo-Costas-blue)
@@ -10,6 +10,12 @@ El objetivo de este repositorio es compartir los códigos utilizados para la apl
 
 El primer paso, para trabajar en tu repositorio local es cambiar las rutas en el script "init.m": 
   - **WrkDir** = ubicación del **repositório local**.
+  
+Luego, el usuario debe seguir el orden de los scripts (a, b, c d):
+  - **a_preparaMedicionesLC.m**: Separa las mediciones disponibles de los datos de COSTSAT para la zona deseada;
+  - **b_preparaTransectas.m**: Prepara el dominio numerico a utilizar en el IH-LANS, interpolando linealmente las mediciones para los transectos sin mediciones disponibles;
+  - **c_calculaPendientesDean.m**: Ajuste perfiles de Dean para los transectos definidos;
+  - **d_runLANS.m**: Genera el INPUT del IH-LANS y llama el modelo.
   
 ### Notas de los autores
 
