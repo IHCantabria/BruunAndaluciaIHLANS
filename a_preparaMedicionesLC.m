@@ -6,14 +6,31 @@ clear *; close all; clc;
 try init; catch me; cd ..; init; end
 %% ------------------------ CARGANDO LOS DATOS ------------------------
 
-LC=readtable('D:\COASTSAT\Tarea_2\M_23\transect_time_series_filtered.csv');
+LC=readtable('D:\COASTSAT\Tarea_2\M_8\transect_time_series_filtered.csv');
 Profiles=readtable('Perfiles_general.csv');
 
 %% ------------------------- SEPARANDO PERFILES -------------------------
 
-perf = 2334:2415; %cambiar
+perf = 4413:4414; %cambiar
 
-k=1;
+% exclude satelites?
+
+% k=1;
+% for i=1:numel(LC.satname)
+%     if LC.satname{i}=='L7' %  | LC.satname{i}=='L7'
+%         
+%     else
+%         idx(k)=i;
+%         k=k+1;
+%     end
+%     
+% end
+% 
+% LC=LC(idx,:);
+% LC=LC(1:end-7,:);
+
+% k=1;
+
 Fecha=zeros(size(LC,1),1);
 
 for i=1:size(LC,1)
@@ -40,33 +57,15 @@ for i=1:numel(perf)
         k=k+1;
 
     catch
-%         ENS(i).time = [];
-%         ENS(i).Yobs = [];
-%         ENS(i).Sat = [];
-%         ENS(i).trs = perf(i);
-%         ENS(i).xon = Profiles.xon(perf(i));
-%         ENS(i).yon = Profiles.yon(perf(i));
-%         ENS(i).xof = Profiles.xof(perf(i));
-%         ENS(i).yof = Profiles.yof(perf(i));
-%         ENS(i).phi = -pi/2.-atan((ENS(i).xof-ENS(i).xon)/(ENS(i).yof-ENS(i).yon));
+        % do nothing
     end
-%     TimeTOT=[TimeTOT;ENS(i).time];
-end
 
-% porque las primeras transectas de la playa no tienen medicion
-% for i=numel(perf)-1:-1:1
-% %     if isempty(ENS(i).Sat)
-% %         ENS(i).time = ENS(i+1).time;
-% %         ENS(i).Yobs = ENS(i+1).Yobs;
-% %         ENS(i).Sat = ENS(i+1).Sat;   
-% %     end
-%     
-% end
+end
 
 %% -------------------- SEPARANDO FECHAS CON MEDICION --------------------
 
 TimeTOT=sort(TimeTOT,'ascend');
-TimeTOT=TimeTOT(diff(TimeTOT) > 1);
+TimeTOT=TimeTOT(diff(TimeTOT) > 15);
 
 for i=1:numel(TimeTOT)
     for j=1:numel(ENS)
@@ -79,7 +78,8 @@ for i=1:numel(TimeTOT)
     end
 end
 
-Yobs=fillmissing(Yobs,'makima');
+Yobs=fillmissing(Yobs,'linear');
+
 
 for i=1:numel(ENS)
 
@@ -98,46 +98,12 @@ for i=1:numel(TimeTOT)
     end
 end
 
-
-% Yobs=Yobs(10:end);
 clear ENS;
 
 ENS.Yobs=Yobs;ENS.X=X; ENS.Y=Y;ENS.time=TimeTOT;
 
 
 
-%% ------------------------- CALCULAMOS LA MEDIA -------------------------
-
-% tmin=min(min(vertcat(ENS.time)));
-% tmax=max(max(vertcat(ENS.time)));
-% 
-% time=[tmin:1/24:tmax]';
-% OBS=nan(numel(time),1);
-% 
-% for i=1:numel(time)
-%     clear ii aux;
-%     for j=1:numel(ENS)
-%         ii = abs(time(i)-ENS(j).time)<=1;
-%         if sum(ii)>0
-%             aux(j) = mean(ENS(j).Yobs(ii));
-%         else
-%             aux(j)=nan;
-%         end
-%     end
-%     OBS(i)=mean(aux(~isnan(aux)));
-% end
-% 
-% OBS=OBS(~isnan(OBS));time=time(~isnan(OBS));
-% 
-% %% ------------------------- DESACOPLAMOS LT y ST -------------------------
-% 
-% timeLT=1*365; %[dias]
-% Y_obs_lt=zeros(size(OBS));%movmean(OBS,timeLT);
-% Y_obs_st=OBS; %OBS - Y_obs_lt;
-% 
-% clear ENS;
-% 
-% ENS.time=time; ENS.Y_obs_lt=Y_obs_lt;ENS.Y_obs_st=Y_obs_st;
 
 %% --- GUARDA DATOS ---
 save([pathRes 'EnsamblesProfiles.mat'],'ENS')

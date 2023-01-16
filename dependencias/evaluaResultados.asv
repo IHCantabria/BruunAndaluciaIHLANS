@@ -1,131 +1,144 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Evalua resultados
 
-function []=evaluaResultados(INPUT,RES,nameFIG,pathFig)
+function []=evaluaResultados(INPUT,RES)
 
-tit='Media General';
-close all;
-F1=figure; 
+
+II=1;
+G=num2cell(1:numel(INPUT.PERF));
+TRS=1;
+
+while II==1
+
+%     TRS=menu('¿Cuál perfil quieres evaluar?',G);
+    close all;
+
+    
+    colores={'k-','kx';...
+        'r-','rv';
+        'm-','mo';
+        'b-','bx';
+        'c-','cx';
+        'g-','g*';
+        'y-','yx';};
+
+    %% Largo plazo
+    pos=[10 700 1100 200];
+    k=1;
+    figure('Position',pos); 
+    tit=['Y_l_t ' num2str(TRS)];
+    plot(RES.t_output,RES.YLT(:,TRS),colores{k,1})
+    hold on
+    plot(INPUT.PERF(TRS).date_obs,INPUT.PERF(TRS).Y_obs_lt,colores{k,2})
+    ax=gca;
+    ax.FontSize=12;
+    ax.FontWeight='bold';
+    ax.YLabel.String='Y [m]';
+    datetick;
+    grid; grid minor;
+    title(tit);
+    %% Corto plazo
+    pos=[10 4500 1100 200];
+    k=2;
+    figure('Position',pos); 
+    tit=['Y_s_t ' num2str(TRS)];
+    plot(RES.t_output,RES.YCT(:,TRS),colores{k,1})
+    hold on
+    plot(INPUT.PERF(TRS).date_obs,-INPUT.PERF(TRS).Y_obs_ct,colores{k,2})
+    ax=gca;
+    ax.FontSize=12;
+    ax.FontWeight='bold';
+    ax.YLabel.String='Y [m]';
+    datetick;
+    grid; grid minor;
+    title(tit);
+    %% Evolución Kcerc
+    pos=[10 250 1100 200];
+    k=3;
+    figure('Position',pos); 
+    tit='K_c_e_r_c';
+    hold on;
+    plot(RES.t_output,RES.kcerc(:,TRS),colores{k,1})
+    ax=gca;
+    ax.FontSize=12;
+    ax.FontWeight='bold';
+    datetick;
+    grid; grid minor;
+    title(tit);
+
+    %% Evolución Kero
+    k=4;
+    figure('Position',pos); 
+    tit='K_e_r_o';
+    hold on;
+    plot(RES.t_output,RES.kero(:,TRS),colores{k,1})
+    ax=gca;
+    ax.FontSize=12;
+    ax.FontWeight='bold';
+    datetick;
+    grid; grid minor;
+    title(tit);
+    
+    %% Evolución Kacr
+    pos=[10 10 1100 200];
+    k=5;
+    figure('Position',pos); 
+    tit='K_a_c_r';
+    hold on;
+    plot(RES.t_output,RES.kacr(:,TRS),colores{k,1})
+    ax=gca;
+    ax.FontSize=12;
+    ax.FontWeight='bold';
+    datetick;
+    grid; grid minor;
+    title(tit);
+    %%
+    II=menu('¿Quieres seguir mirando?',{'Si','No'});
+    
+    TRS=TRS+1;
+    if TRS==numel(INPUT.PERF)
+        TRS=0;
+    end
+
+end
+
+figure('Position',pos); 
+tit='K_a_c_r Geral';
 hold on;
-title(tit);
-plot(RES.t_output,mean(RES.YCT,2)+mean(RES.YLT,2),'k-')
-ax=gca;
-ax.FontSize=12;
-ax.FontWeight='bold';
-legend('Transectos');
-grid; grid minor;
-datetick;
-print([pathFig tit nameFIG],F1,'-dpng')
-
-
-%% Resultado por transectos
-F2=figure; 
-tit='TRS-1-10-81';
-title(tit);
-colores={'k-','kx';...
-    'r-','rx';
-    'm-','mx';
-    'g-','gx';
-    'y-','yx';
-    'b-','bx';
-    'c-','cx';};
-k=1;
-hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.YCT(:,i)+RES.YLT(:,i),colores{k,1})
-    plot(INPUT.PERF(i).date_obs,INPUT.PERF(i).Y_obs_ct,colores{k,2})
-    k=k+1;
+for i=1:numel(INPUT.PERF)
+    plot(RES.t_output,RES.kacr(:,i))
 end
 ax=gca;
 ax.FontSize=12;
 ax.FontWeight='bold';
 datetick;
 grid; grid minor;
-print([pathFig tit nameFIG],F2,'-dpng')
-
-
-%% Corto plazo
-F3=figure; 
-tit='Y_s_t';
 title(tit);
-k=1;
+
+figure('Position',pos); 
+tit='K_e_r_o Geral';
 hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.YCT(:,i),colores{k,1})
-    k=k+1;
+for i=1:numel(INPUT.PERF)
+    plot(RES.t_output,RES.kero(:,i))
 end
 ax=gca;
 ax.FontSize=12;
 ax.FontWeight='bold';
 datetick;
 grid; grid minor;
-print([pathFig tit nameFIG],F3,'-dpng')
-
-%% Largo plazo
-F4=figure; 
-tit='Y_l_t';
 title(tit);
-k=1;
+
+
+figure('Position',pos); 
+tit='K_c_e_r_c Geral';
 hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.YLT(:,i),colores{k,1})
-    k=k+1;
+for i=1:numel(INPUT.PERF)
+    plot(RES.t_output,RES.kcerc(:,i))
 end
 ax=gca;
 ax.FontSize=12;
 ax.FontWeight='bold';
 datetick;
 grid; grid minor;
-print([pathFig tit nameFIG],F4,'-dpng')
-
-%% Evolución Kcerc
-F5=figure; 
-tit='K_c_e_r_c';
 title(tit);
-k=1;
-hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.kcerc(:,i),colores{k,1})
-    k=k+1;
-end
-ax=gca;
-ax.FontSize=12;
-ax.FontWeight='bold';
-datetick;
-grid; grid minor;
-print([pathFig tit nameFIG],F5,'-dpng')
-
-%% Evolución Kero
-F6=figure; 
-tit='K_e_r_o';
-title(tit);
-k=1;
-hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.kero(:,i),colores{k,1})
-    k=k+1;
-end
-ax=gca;
-ax.FontSize=12;
-ax.FontWeight='bold';
-datetick;
-grid; grid minor;
-print([pathFig tit nameFIG],F6,'-dpng')
-
-%% Evolución Kacr
-F7=figure; 
-tit='K_a_c_r';
-title(tit);
-k=1;
-hold on;
-for i=1:10:61
-    plot(RES.t_output,RES.kacr(:,i),colores{k,1})
-    k=k+1;
-end
-ax=gca;
-ax.FontSize=12;
-ax.FontWeight='bold';
-datetick;
-grid; grid minor;
-print([pathFig tit nameFIG],F7,'-dpng')
 
