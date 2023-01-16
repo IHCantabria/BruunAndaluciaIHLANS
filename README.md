@@ -1,7 +1,7 @@
 # Aplicación del modelo IH-LANS a la costa Andaluza para el proyecto Bruun Andalucia 
 
 ![Versión del código](https://img.shields.io/badge/Version-0.0.1-brightgreen)
-https://img.shields.io/github/repo-size/IHCantabria/BruunAndaluciaIHLANS
+![GitHub repo size](https://img.shields.io/github/repo-size/IHCantabria/BruunAndaluciaIHLANS)
 ![Grupo IH](https://img.shields.io/badge/Grupo-Costas-blue)
 ![](https://img.shields.io/badge/%C2%BFDudas%3F-M%C3%A1ndame%20un%20correo-orange) <lucas.defreitas@unican.es>
 
